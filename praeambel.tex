@@ -1,0 +1,46 @@
+% =====================================================================
+% Gemeinsame Präambel für main.tex (Konzept) und fragenkatalog.tex
+% Einbinden mit \input{praeambel}
+% =====================================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Farben ----------
+\definecolor{zwetschge}{HTML}{5B2A86}
+\definecolor{offen}{HTML}{C0392B}
+
+% ---------- Kopf- und Fusszeile ----------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Zwätschgenabend -- Pubquiz}
+\rhead{HSLU Elektrotechnik}
+\cfoot{\thepage}
+\setlength{\headheight}{14pt}
+
+% ---------- Listen ----------
+\setlist[itemize]{itemsep=0.2em, topsep=0.3em}
+
+% ---------- Hilfsmakros ----------
+% Markiert Punkte, die das OK noch klären muss
+\newcommand{\offen}[1]{\textcolor{offen}{\textbf{[offen:} #1\textbf{]}}}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  rulecolor=\color{zwetschge!50},
+  language=C,
+  columns=fullflexible,
+  xleftmargin=1em
+}
