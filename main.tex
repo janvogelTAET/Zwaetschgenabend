@@ -1,0 +1,196 @@
+% !TEX program = pdflatex
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[ngerman]{babel}
+\usepackage[margin=2.3cm]{geometry}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+% ---------- Schalter: Lösungen ein-/ausblenden ----------
+\newif\ifloesung
+\loesungtrue   % für Fragenheft der Teams: \loesungfalse
+
+% ---------- Farben und Makros ----------
+\definecolor{zwetschge}{HTML}{5B2A86}
+\newcommand{\loesung}[1]{\ifloesung\par\smallskip\noindent\textcolor{zwetschge}{\textbf{Lösung:} #1}\fi}
+\newcommand{\frage}[2]{\item #1\loesung{#2}}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  frame=single,
+  rulecolor=\color{zwetschge!50},
+  language=C,
+  columns=fullflexible,
+  xleftmargin=1em
+}
+
+\setlist[enumerate]{itemsep=0.9em, topsep=0.5em}
+\setlist[itemize]{itemsep=0.2em, topsep=0.3em}
+
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Zwätschgen-Pubquiz}
+\rhead{HSLU Elektrotechnik}
+\cfoot{\thepage}
+
+\newcommand{\runde}[2]{\section{Runde #1: #2}}
+
+\title{\textcolor{zwetschge}{\textbf{Zwätschgen-Pubquiz}}\\[0.3em]\large Konzeptentwurf und Fragenkatalog}
+\author{OK Zwätschgenabend, HSLU Elektrotechnik}
+\date{\today}
+
+\begin{document}
+\maketitle
+\thispagestyle{fancy}
+
+\section{Idee}
+Beim Zwätschgenabend sollen sich alle drei Jahrgänge der ET mischen. Ein Pubquiz mit gemischten Teams erzwingt genau das: Wer die Aufgabe allein nicht lösen kann, muss mit dem Tisch reden. Die Fragen sind knifflig, aber mit Überlegen, Schätzen und Teamwissen lösbar. Reines Auswendigwissen reicht nicht.
+
+\section{Teambildung}
+\begin{itemize}
+  \item \textbf{Los beim Eintreffen:} Jede Person zieht eine nummerierte oder farbige Zwetschgenkarte. Gleiche Karte heisst gleiches Team.
+  \item \textbf{Jahrgangsmix:} Die Karten werden vorab so vorsortiert, dass pro Team höchstens zwei Personen aus demselben Jahrgang sitzen. Ziel sind 5 bis 6 Personen pro Team, also etwa 2--2--2 aus den drei Jahrgängen.
+  \item \textbf{Teamname:} Jedes Team gibt sich einen ET-Namen (z.\,B. «Phasenverschieber», «Kurzschluss-Handlung»). Der beste Name erhält einen Sonderpreis.
+\end{itemize}
+
+\subsection*{Einbindung der Dozierenden}
+\begin{tabularx}{\textwidth}{@{}l X X@{}}
+\toprule
+ & \textbf{Variante A: Joker (empfohlen)} & \textbf{Variante B: Dozententeams} \\
+\midrule
+Prinzip & Jedes Team darf pro Abend einmal einen Dozierenden an den Tisch holen. & Ein bis zwei Dozententeams spielen mit. \\
+Vorteil & Dozierende mischen sich unter alle Teams und die Jahrgänge bleiben gemischt. & Klarer «Gegner», den alle schlagen wollen. \\
+Nachteil & Dozierende müssen aktiv rotieren. & Dozierende bleiben unter sich, der Austausch leidet. \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+\noindent Vorschlag: Variante A, ergänzt um ein Dozenten-Team ausser Konkurrenz für die Dozentenrunde.
+
+\section{Ablauf (ca.\ 2,5 Stunden)}
+\begin{tabularx}{\textwidth}{@{}l l X@{}}
+\toprule
+\textbf{Zeit} & \textbf{Block} & \textbf{Inhalt} \\
+\midrule
+0:00 & Start & Begrüssung, Regeln, Teams finden \\
+0:20 & Runde 1 & ET-Knobelrunde \\
+0:45 & Runde 2 & Schätzfragen \\
+1:05 & Pause & Essen und Trinken \\
+1:25 & Runde 3 & Debug- und Logikrunde \\
+1:50 & Runde 4 & Bild- und Hörrunde \\
+2:10 & Runde 5 & Dozentenrunde \\
+2:25 & Finale & Teamaktion und Finalfrage mit Punkteinsatz \\
+2:45 & Ende & Siegerehrung \\
+\bottomrule
+\end{tabularx}
+
+\subsection*{Regeln und Punkte}
+\begin{itemize}
+  \item Antworten auf dem Zettel, nach jeder Runde abgeben. Keine Handys (Ehrensache, Dozierende kontrollieren mit).
+  \item Standardfrage: 2 Punkte. Teilantworten (z.\,B. richtiger Ansatz, falsche Zahl): 1 Punkt.
+  \item Schätzfragen: das nächstliegende Team erhält 3 Punkte, das zweitnächste 2, das drittnächste 1. Bei Zahlen über mehrere Grössenordnungen wird logarithmisch gerechnet.
+  \item Finalfrage: Jedes Team setzt vorab beliebig viele seiner Punkte. Richtig heisst Einsatz verdoppelt, falsch heisst Einsatz weg.
+  \item Die Auswertung läuft live in einem Google Sheet, das am Beamer angezeigt wird.
+\end{itemize}
+
+\newpage
+\section*{Fragenkatalog}
+Der Schwierigkeitsgrad ist bewusst hoch gewählt: Ein Jahrgang allein sollte nicht alles lösen können. Mit der Variable \texttt{\textbackslash loesungtrue} bzw.\ \texttt{\textbackslash loesungfalse} am Dokumentanfang werden die Lösungen ein- oder ausgeblendet.
+
+\runde{1}{ET-Knobelrunde}
+Rechnen ohne Taschenrechner ist erlaubt, Ergebnisse auf zwei gültige Stellen genau.
+\begin{enumerate}
+  \frage{Ein 12-Bit-ADC hat eine Referenzspannung von $3{,}3\,\mathrm{V}$. Wie gross ist die Spannung eines LSB?}{$3{,}3\,\mathrm{V}/4096 \approx 0{,}81\,\mathrm{mV}$}
+  \frage{Ein RC-Glied mit $R = 10\,\mathrm{k\Omega}$ und $C = 100\,\mathrm{nF}$ wird an eine Gleichspannung geschaltet. Nach welcher Zeit ist der Kondensator zu $90\,\%$ geladen?}{$\tau = 1\,\mathrm{ms}$, $t = \tau \ln 10 \approx 2{,}3\,\mathrm{ms}$}
+  \frage{Ein $3\,\mathrm{kHz}$-Sinussignal wird mit $4\,\mathrm{kHz}$ abgetastet, ohne Anti-Aliasing-Filter. Bei welcher Frequenz erscheint das Signal im Spektrum?}{$1\,\mathrm{kHz}$ (Aliasing: $|3 - 4| = 1\,\mathrm{kHz}$)}
+  \frage{Ein Tiefpass erster Ordnung wird bei seiner Eckfrequenz betrieben. Wie gross sind die Phasenverschiebung und der Betrag der Übertragungsfunktion?}{$-45^\circ$ und $1/\sqrt{2} \approx -3\,\mathrm{dB}$}
+  \frage{Ein Übertragungskanal hat $1\,\mathrm{MHz}$ Bandbreite und ein SNR von 31 (linear). Welche maximale Datenrate ist nach Shannon möglich?}{$C = B \log_2(1+31) = 1\,\mathrm{MHz} \cdot 5 = 5\,\mathrm{Mbit/s}$}
+  \frage{Ein $1\,\mathrm{\mu F}$-Kondensator liegt am $50\,\mathrm{Hz}$-Netz. Welchen Betrag hat seine Impedanz?}{$1/(2\pi \cdot 50 \cdot 10^{-6}) \approx 3{,}2\,\mathrm{k\Omega}$}
+  \frage{Eine Last nimmt $1\,\mathrm{kW}$ Wirkleistung bei $\cos\varphi = 0{,}8$ auf. Wie gross sind Scheinleistung und Blindleistung?}{$S = 1{,}25\,\mathrm{kVA}$, $Q = 0{,}75\,\mathrm{kvar}$}
+  \frage{Eine vierpolige Asynchronmaschine ($p = 2$) läuft am $50\,\mathrm{Hz}$-Netz. Wie hoch ist die Synchrondrehzahl?}{$n_s = 60 \cdot 50/2 = 1500\,\mathrm{min^{-1}}$}
+\end{enumerate}
+
+\runde{2}{Schätzfragen}
+Das nächstliegende Team gewinnt. Bei zeitabhängigen Werten den Stand vor dem Anlass prüfen.
+\begin{enumerate}
+  \frage{Wie viele Elektronen fliessen bei $1\,\mathrm{A}$ pro Sekunde durch einen Leiterquerschnitt?}{ca.\ $6{,}24 \cdot 10^{18}$ ($1/1{,}602 \cdot 10^{-19}$)}
+  \frage{Wie viele Transistoren enthielt der erste Mikroprozessor, der Intel 4004 (1971)?}{ca.\ 2300}
+  \frage{Wie lang ist der Gotthard-Basistunnel (Gesamtlänge Tunnelsystem)?}{ca.\ $57\,\mathrm{km}$}
+  \frage{Wie hoch ist die Staumauer der Grande Dixence?}{$285\,\mathrm{m}$}
+  \frage{Wie hoch ist der jährliche Stromverbrauch der Schweiz (Landesverbrauch) in TWh?}{ca.\ $57\,\mathrm{TWh}$ (Stand vor dem Anlass bei Swissgrid/BFE prüfen)}
+  \frage{Mit welcher Frequenz arbeitet das Bahnstromnetz der SBB und wie hoch ist die Fahrleitungsspannung?}{$16{,}7\,\mathrm{Hz}$ ($16\,2/3\,\mathrm{Hz}$) und $15\,\mathrm{kV}$}
+\end{enumerate}
+
+\runde{3}{Debug- und Logikrunde}
+\begin{enumerate}
+  \item Was gibt das folgende C-Programm aus? (\texttt{uint8\_t} ist 8 Bit unsigned.)
+\begin{lstlisting}
+uint8_t a = 200, b = 100;
+uint8_t c = (uint8_t)(a + b) / 2;
+printf("%u", c);
+\end{lstlisting}
+  \loesung{22. Die Summe 300 wird auf 8 Bit abgeschnitten ($300 \bmod 256 = 44$) und danach durch 2 geteilt.}
+
+  \item Was gibt das folgende Programm auf einem üblichen Compiler aus?
+\begin{lstlisting}
+int x = -7;
+printf("%d %d", x / 2, x >> 1);
+\end{lstlisting}
+  \loesung{«-3 -4». Die Division rundet gegen null, der arithmetische Rechtsshift rundet gegen minus unendlich.}
+
+  \frage{Welches ist der nächste Wert im 3-Bit-Gray-Code? Folge: 000, 001, 011, 010, 110, 111, 101, \dots}{100}
+  \frage{Wie viele Flip-Flops braucht ein synchroner Binärzähler, der von 0 bis 99 zählt?}{7 ($2^7 = 128 \geq 100$, $2^6 = 64 < 100$)}
+  \frage{Wie viele 2-Eingangs-NAND-Gatter braucht man mindestens, um ein XOR zu bauen?}{4}
+  \frage{Ein Würfel besteht aus 12 gleichen Widerständen $R$ (Kanten). Welchen Widerstand misst man zwischen zwei gegenüberliegenden Ecken (Raumdiagonale)?}{$5R/6$ (Symmetrie: $R/3 + R/6 + R/3$)}
+  \frage{Eine unendlich lange Leiter besteht aus abwechselnd Längswiderstand $R$ und Querwiderstand $R$. Welchen Eingangswiderstand hat sie?}{$x = R + R \parallel x \Rightarrow x^2 - Rx - R^2 = 0 \Rightarrow x = R\,\frac{1+\sqrt{5}}{2} \approx 1{,}62\,R$ (goldener Schnitt)}
+  \frage{Im Keller sind drei Schalter. Nur einer gehört zur Glühlampe im Dachstock, die Lampe sieht man von unten nicht. Du darfst nur einmal nach oben gehen. Wie findest du den richtigen Schalter?}{Schalter 1 für einige Minuten an, dann aus. Schalter 2 an. Hochgehen: Lampe an heisst Schalter 2, Lampe aus aber warm heisst Schalter 1, kalt und aus heisst Schalter 3.}
+\end{enumerate}
+
+\runde{4}{Bild- und Hörrunde}
+Folien oder Audio am Beamer, Materialvorschläge:
+\begin{enumerate}
+  \frage{Morse-Code entschlüsseln (Morsetabelle liegt auf dem Tisch): \texttt{.... ... .-.. ..-}}{HSLU}
+  \item \textbf{Schaltzeichen:} Zehn Schaltzeichen erkennen (Z-Diode, Schottky-Diode, Thyristor, Triac, OPV, Optokoppler, Quarz, Varistor, Übertrager, Relais). Zusatzpunkt für die Funktion.
+  \item \textbf{Platine:} Foto einer bekannten Platine (z.\,B.\ Raspberry Pi, STM32-Nucleo, Arduino): Welcher Chip steckt in der Mitte?
+  \item \textbf{Geräusche:} Modem-Einwahl, Netzbrummen $50\,\mathrm{Hz}$, Relais, Schaltnetzteil-Pfeifen. Was ist das?
+  \item \textbf{Firmenlogos:} Elektro- und Energiefirmen der Zentralschweiz (ABB, Landis+Gyr, Schindler, CKW, EWL, \dots).
+\end{enumerate}
+
+\runde{5}{Dozentenrunde}
+Mit den Dozierenden vorab abzusprechen.
+\begin{enumerate}
+  \item \textbf{Wer ist wer?} Kinderfotos der Dozierenden zuordnen.
+  \item \textbf{Wer hat's gesagt?} Typische Vorlesungszitate dem richtigen Dozierenden zuordnen.
+  \item \textbf{Zwei Wahrheiten, eine Lüge:} Jede dozierende Person liefert vorab drei Aussagen über sich. Die Teams erraten die Lüge.
+\end{enumerate}
+
+\runde{6}{Teamaktion und Finale}
+\begin{itemize}
+  \item \textbf{Widerstandsfarbcode-Speedrun:} Zehn farbcodierte Widerstände, wer liest sie am schnellsten richtig ab?
+  \item \textbf{Papierflieger oder Spaghetti-Turm:} Teamchallenge mit Zeitlimit, gewertet nach Weite bzw.\ Höhe.
+\end{itemize}
+
+\subsection*{Finalfrage mit Punkteinsatz}
+\begin{enumerate}
+  \frage{Bringe diese Erfindungen in die richtige zeitliche Reihenfolge: Mikroprozessor (Intel 4004), Voltasche Säule, integrierter Schaltkreis, Transistor, Glühlampe.}{Voltasche Säule (1800), Glühlampe (1879), Transistor (1947), integrierter Schaltkreis (1958), Mikroprozessor (1971)}
+\end{enumerate}
+
+\section*{Offene Punkte}
+\begin{itemize}
+  \item Teilnehmerzahl und damit Anzahl Teams
+  \item Beamer und Soundanlage vorhanden?
+  \item Verfügbare Zeit für das Quiz
+  \item Welche Dozierenden machen mit?
+  \item Preise (Zwetschgenschnaps, Kuchen, Trostpreis)
+\end{itemize}
+
+\end{document}
