@@ -1,0 +1,433 @@
+\documentclass[a4paper,11pt]{article}
+\input{praeambel}
+
+\newif\ifloesung
+\loesungtrue
+
+\newcommand{\loesung}[1]{%
+  \ifloesung\par\smallskip{\color{zwetschge}\textit{Lösung: #1}}\par\medskip\fi}
+
+\long\def\mc#1#2?#3#4#5#6#7{%
+  \subsection*{#1}
+  #2?
+  \begin{enumerate}[label=\Alph*)]
+    \item #3
+    \item #4
+    \item #5
+    \item #6
+  \end{enumerate}
+  \loesung{#7}}
+
+\newcommand{\offenfrage}[3]{%
+  \subsection*{#1}
+  #2
+  \loesung{#3}}
+
+\newcommand{\runde}[1]{\newpage\section*{#1}\addcontentsline{toc}{section}{#1}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Zwätschgenabend -- Fragenkatalog}\\[0.4em]
+  {\large HSLU Elektrotechnik}\\[0.8em]
+  \textit{Zuerst wissen. Später nur noch verdächtig gut raten.}
+\end{center}
+
+\noindent
+\textbf{Spielidee:} Die ersten beiden Runden sind noch fachlich vertretbar.
+Danach wird es zunehmend wichtig, wer wirklich zuhört, wenn im Labor niemand
+mehr zuhört. Pro Frage ein Punkt, bei offenen Fragen entscheidet die
+Quizleitung über technisch vertretbare Kreativität.
+
+\runde{1. Noch ganz normale Fachfragen}
+
+\mc{1.1 -- Ein ehrlicher Bildschirm}
+Auf dem Oszilloskop füllt genau eine Periode eines Signals vier horizontale
+Kästchen. Die Zeitbasis steht auf $5\,\mathrm{ms/div}$. Welche Frequenz hat das
+Signal?
+{$25\,\mathrm{Hz}$}
+{$50\,\mathrm{Hz}$}
+{$100\,\mathrm{Hz}$}
+{So präzise misst man nur, wenn jemand zuschaut.}
+{B -- Eine Periode dauert $20\,\mathrm{ms}$, also $50\,\mathrm{Hz}$.}
+
+\mc{1.2 -- Der Widerstand als Lebensberatung}
+Warum bekommt eine LED in einer üblichen Schaltung einen Vorwiderstand?
+{Damit sie beim Einschalten nicht sofort sehr persönlich mit dem Netzteil wird.}
+{Damit ihre Farbe mathematisch stabil bleibt.}
+{Damit der Strom begrenzt wird.}
+{Damit man auf dem Schema noch etwas zum Beschriften hat.}
+{C -- und A beschreibt die Konsequenz davon erstaunlich gut.}
+
+\mc{1.3 -- Leistung ohne Meinung}
+An $12\,\mathrm{V}$ fliesst ein Strom von $2\,\mathrm{A}$. Welche Leistung
+wird umgesetzt?
+{$6\,\mathrm{W}$}
+{$10\,\mathrm{W}$}
+{$14\,\mathrm{W}$}
+{$24\,\mathrm{W}$}
+{D -- $P=U\cdot I$. Das Netzteil darf danach trotzdem kurz warm werden.}
+
+\mc{1.4 -- Die höfliche Sicherung}
+Welche Komponente unterbricht den Stromkreis im Fehlerfall am ehesten,
+ohne dabei so zu tun, als sei nichts passiert?
+{Eine Sicherung}
+{Ein Pull-up-Widerstand}
+{Ein Quarz}
+{Ein Student mit einem sehr langen Schraubenzieher}
+{A -- der Schraubenzieher ist keine zugelassene Schutzmassnahme.}
+
+\mc{1.5 -- Digital, aber nicht magisch}
+Was bedeuten $3{,}3\,\mathrm{V}$ an einem üblichen digitalen Eingang
+\emph{typischerweise}?
+{Logisch 1}
+{Logisch 0}
+{Der Eingang will zuerst ein Datenblatt lesen.}
+{Dass die Schaltung sicher mit $5\,\mathrm{V}$ betrieben werden darf.}
+{A -- mit dem üblichen Hinweis auf Datenblatt, Versorgung und Logikfamilie.}
+
+\mc{1.6 -- Der Puffer, den alle kennen}
+Was macht ein Kondensator direkt bei der Versorgung eines ICs besonders
+gern?
+{Er puffert schnelle Spannungseinbrüche und Störungen.}
+{Er übersetzt C nach Python.}
+{Er gibt dem IC emotionale Stabilität.}
+{Er erhöht die Frequenz, weil er klein ist.}
+{A -- deshalb liegt er auch nicht dekorativ neben dem IC.}
+
+\mc{1.7 -- Der erste Fehler}
+Eine Schaltung funktioniert nicht. Welche erste Handlung ist am ehesten
+Ingenieurwesen und am wenigsten Wunschdenken?
+{Den Code komplett neu schreiben.}
+{Versorgung, Polarität und offensichtliche Verbindungen messen.}
+{Die Schaltung dreimal aus- und wieder einschalten.}
+{Erklären, dass sie zuhause noch funktioniert hat.}
+{B -- die anderen Varianten sind danach immer noch verfügbar.}
+
+\offenfrage{1.8 -- Die einzige ehrliche Antwort}
+Nenne eine Messung, die du vor dem Satz \textit{«Das Layout ist schuld»}
+machen würdest.
+{Zum Beispiel Versorgungsspannung, Stromaufnahme, Massebezug, Signal direkt
+an der Quelle oder Lötstellen. Jede sinnvolle Messung zählt.}
+
+\runde{2. Signale mit Nebenwirkungen}
+
+\mc{2.1 -- Faltung, endlich praktisch}
+Was beschreibt die Faltung eines Eingangssignals mit der Impulsantwort
+eines linearen zeitinvarianten Systems?
+{Wie das System auf das Eingangssignal reagiert.}
+{Wie zwei Signale sich im Labor gegenseitig ignorieren.}
+{Eine Methode, Kabel platzsparend zu verlegen.}
+{Den Moment, in dem aus Mathematik Gruppenarbeit wird.}
+{A -- leider exakt die mathematische Version von «das System macht etwas damit».}
+
+\mc{2.2 -- Der Frequenzgang als Charaktertest}
+Ein Tiefpass dämpft hohe Frequenzen. Was passiert mit einem Rechtecksignal,
+wenn man ihn ernst nimmt?
+{Die Flanken werden runder.}
+{Es wird automatisch ein Sinus mit besserem Selbstwertgefühl.}
+{Die Frequenz verschwindet aus Respekt.}
+{Das Signal beantragt einen Wechsel zu Digital Engineering.}
+{A -- genügend starke Filterung kann es allerdings sehr sinusähnlich machen.}
+
+\mc{2.3 -- Der Lüfter lügt}
+Ein Lüfter wird viel zu langsam abgetastet und scheint auf dem Bildschirm
+rückwärts zu laufen. Wie heisst der Effekt?
+{Doppler-Effekt}
+{Aliasing}
+{Faltung}
+{Der Lüfter hat eine Meinung zum Praktikum.}
+{B -- das Signal tut nur so, als hätte es eine tiefere Frequenz.}
+
+\mc{2.4 -- Nyquist ohne Ausrede}
+Welche minimale Abtastrate braucht ein ideal bandbegrenztes Signal mit einer
+höchsten Frequenz von $8\,\mathrm{kHz}$ mindestens?
+{$4\,\mathrm{kHz}$}
+{$8\,\mathrm{kHz}$}
+{$16\,\mathrm{kHz}$}
+{Eine Rate, die sich dynamisch genug anfühlt.}
+{C -- mindestens das Doppelte der höchsten vorkommenden Frequenz.}
+
+\mc{2.5 -- Bode im Alltag}
+Was liest man in einem Bode-Diagramm direkt ab?
+{Amplituden- und Phasenverlauf über der Frequenz.}
+{Die Wahrscheinlichkeit, dass das Labor noch offen ist.}
+{Die Anzahl korrekt angeschlossener Masseklemmen.}
+{Die Stimmung einer Rückkopplung.}
+{A -- die Stimmung lässt sich höchstens daraus ableiten.}
+
+\mc{2.6 -- Die falsche Sicherheit}
+Ein Frequenzgang sieht in der Simulation wunderschön aus, die Hardware
+schwingt aber. Was ist die beste erste Vermutung?
+{Die Realität hat einen Rechenfehler.}
+{Parasitische Effekte, Bauteiltoleranzen oder Aufbau wurden idealisiert.}
+{Das Oszilloskop will provozieren.}
+{Die Frequenzantwort wurde beleidigt.}
+{B -- echte Bauteile und echte Leiterplatten haben leider Nebenrollen.}
+
+\mc{2.7 -- Filterfrage mit Musik}
+Welche Schaltung lässt langsame Änderungen passieren und dämpft schnelle?
+{Tiefpass}
+{Hochpass}
+{Bandpass}
+{Der Filter im Kaffeeautomaten}
+{A -- ein Tiefpass ist praktisch der Türsteher für schnelle Signale.}
+
+\offenfrage{2.8 -- Faltung in einem Satz}
+Erkläre Faltung so, dass auch ein Mensch mit drei Stunden Schlaf noch
+glaubt, sie verstanden zu haben.
+{Sinngemäss: Man betrachtet, wie sich die Impulsantwort des Systems für jeden
+Zeitpunkt mit dem Eingang überlagert. Gute, verständliche Bilder zählen.}
+
+\input{fragen_insider}
+\end{document}
+
+% Archiv des verworfenen Insider-Entwurfs
+\iffalse
+\runde{3. Laborfolklore}
+
+\mc{3.1 -- Der Knopf}
+Im ET-Labor gilt die Taste \texttt{Autoscale} als sicherheitskritisch. Was passiert laut Gerüchten, wenn sie trotzdem gedrückt wird?
+{Das Oszilloskop beantragt eine Weiterbildung in Digital Engineering.}
+{Der Frequenzgang wird emotional und beginnt, den Raum zu bewerten.}
+{Rolf Mettler kehrt aus dem Ruhestand zurück und stellt den Knopf auf manuell.}
+{Die Zentralbahn fährt wegen EMV-Bedenken nur noch im Rechtecksignal.}
+{C}
+
+\offenfrage{3.2 -- Die Frage, die keine Erklärung braucht}
+Wer ist «the one and only»?
+{Rolf Mettler.}
+
+\mc{3.3 -- Der Satz, der länger dauert als die Frage}
+Eine Aussage wird mitunter, oder auch nicht, zunächst erklärt; oder man
+erklärt mitunter zuerst, weshalb sie vielleicht, oder eben gerade nicht,
+erklärt werden muss. Wer hat den Raum betreten?
+{Kilian Schuster}
+{Thomas Hunziker}
+{Giselher Wichmann}
+{Ein Chatbot, der zu viel Kaffee hatte}
+{A -- wer bei «mitunter» und «oder» bereits die Stimme gehört hat, ist klar im Vorteil.}
+
+\mc{3.4 -- Mehrsprachiges Debugging}
+Ein Laptop läuft auf Japanisch, ein Datenblatt wird in einer weiteren Sprache
+gelesen, und danach wird ein Signalproblem erstaunlich elegant gelöst. Was
+ist in diesem Moment die eigentliche gemeinsame Muttersprache?
+{Python}
+{Latex}
+{C, aber nur wenn ein Semikolon herumliegt}
+{Die Sprache, in der Datenblätter nie geschrieben sind}
+{A -- bei Thomas Hunziker ist Python keine Programmiersprache, sondern offenbar Grundversorgung.}
+
+\mc{3.5 -- Die Oberarmmessung}
+Ein Dozent erscheint mit einer Bizepsstabilität, bei der selbst ein
+abgeglichenes Netzteil kurz nachfragt. Welche Untersuchung fordert die
+völlig unseriöse Campusforschung?
+{Eine Dopingkontrolle}
+{Eine EMV-Messung}
+{Eine Augenprüfung}
+{Ein Update des Stundenplans}
+{A -- der betroffene Mikrocontroller-Dozent weiss, wer gemeint ist.}
+
+\mc{3.6 -- Die Augenbraue als Messgerät}
+Im Labor hebt sich eine Augenbraue minimal. Welche Handlung hat jetzt die
+höchste Erfolgswahrscheinlichkeit?
+{Die Messung nochmals von Hand prüfen.}
+{Autoscale drücken, damit es endlich objektiv wird.}
+{Erklären, dass die Simulation anders aussah.}
+{Das Netzteil vorsorglich auf Maximum drehen.}
+{A -- ein sehr präziser analoger Kommunikationskanal.}
+
+\mc{3.7 -- Die Kreidetafel als Hochfrequenzgerät}
+Eine Erklärung enthält Laplace, Frequenzbereich und Schweizerdeutsch, bis
+das Thema plötzlich doch nachvollziehbar wird. Wer ist gemeint?
+{Giselher Wichmann}
+{Adrian Omlin}
+{Erich Styger}
+{Patric Eberle}
+{A}
+
+\mc{3.8 -- Heavy Metal, aber mit Netzrückwirkung}
+Jemand kann einen Raum mit $50\,\mathrm{Hz}$, Leistungselektronik und
+«Heavy Metal» füllen, ohne eine einzige Gitarre auszupacken. Wer?
+{Adrian Omlin}
+{Markus Thalmann}
+{Kilian Schuster}
+{Thomas Hunziker}
+{A}
+
+\mc{3.9 -- Der Bug merkt es selbst}
+Ein Fehler im Embedded-Code fühlt sich bereits ertappt, noch bevor jemand
+den Debugger geöffnet hat. Wer könnte gerade in der Nähe sein?
+{Erich Styger}
+{Giselher Wichmann}
+{Thomas Graf}
+{Ein Pull-down-Widerstand}
+{A -- manche Menschen haben eine sehr kurze Distanz zum Fehler.}
+
+\mc{3.10 -- Die harmlose Rückfrage}
+Welcher Satz bedeutet mit hoher Wahrscheinlichkeit, dass nun alle ihre
+Unterlagen innerlich neu sortieren müssen?
+{«Das hättet ihr doch schon gelernt, oder?»}
+{«Wir machen heute früher Schluss.»}
+{«Das wird nicht geprüft.»}
+{«Die Messung sieht plausibel aus.»}
+{A -- besonders gefährlich, wenn Patric Eberle dabei freundlich wirkt.}
+
+\mc{3.11 -- Die Verschlüsselung des Alltags}
+Ein Hardwareprojekt hat plötzlich einen Quantencomputer, die NSA und ein
+ASIC im Raum, obwohl ursprünglich nur ein Bauteil erklärt werden sollte.
+Wer ist am wahrscheinlichsten schuld?
+{Markus Thalmann}
+{Adrian Omlin}
+{Christian Jost}
+{Der Hausdienst}
+{A}
+
+\offenfrage{3.12 -- Nicht im Datenblatt}
+Erfinde eine technische Warnmeldung, die im ET-Labor dringend fehlen würde.
+{Juryentscheid. Bonus, wenn sie glaubwürdig klingt und trotzdem niemand sie
+jemals implementieren dürfte.}
+
+\runde{4. Campuswissen, das man nirgends lernt}
+
+\mc{4.1 -- Kanonenfutter}
+Was ist Kanonenfutter?
+{Gebäudetechniker in ET2}
+{Ein falsch dimensionierter Shunt}
+{Der Inhalt einer Kaffeepause um 07:55 Uhr}
+{Die erste Zeile eines ungetesteten C-Programms}
+{A -- eine Campusweisheit, die ohne weitere Herleitung auskommt.}
+
+\mc{4.2 -- Ein beruhigendes Zeichen}
+Was ist an einer Prüfung in Elektrotechnik fast immer ein gutes Zeichen?
+{Auch WI-Studierende sitzen im Modul.}
+{Das Oszilloskop startet sofort.}
+{Die Aufgabenstellung enthält nur ein Bild.}
+{Jemand sagt vor Beginn «das geht schnell».}
+{A -- dann besteht zumindest Hoffnung, dass die Formeln nicht weglaufen.}
+
+\mc{4.3 -- Die Digital-Engineering-Materialprobe}
+Digital Engineering sagt: «Wir machen selbstverständlich auch Hardware.»
+Welches Objekt wird als überzeugendster Beweis auf den Tisch gelegt?
+{Ein Kabel, das tatsächlich an beiden Enden eingesteckt ist.}
+{Ein Figma-Board mit sehr realistischem Schatten.}
+{Ein QR-Code zur Dokumentation eines Kabels.}
+{Ein Bluetooth-Symbol, aus Holz gelasert.}
+{A -- ein funktionierendes Kabel ist im Zweifel das physischste Argument.}
+
+\mc{4.4 -- Der gemeinsame Nenner}
+Wann erkennen sich ET, WI und Digital Engineering ausnahmsweise sofort
+gegenseitig als gleichwertige Menschen?
+{Wenn das WLAN während einer Abgabe ausfällt.}
+{Wenn jemand «Synergie» sagt.}
+{Wenn ein Blockdiagramm drei Farben hat.}
+{Wenn das Projekt einen Namen mit «Smart» trägt.}
+{A -- Notlagen schaffen Interdisziplinarität.}
+
+\mc{4.5 -- Projektstatus nach Studiengang}
+Ein ET-Team sagt: «Es läuft.» Ein WI-Team sagt: «Es ist im Plan.» Ein
+Digital-Engineering-Team sagt: «Die Experience ist stimmig.» Welche
+Gegenfrage klärt alle drei Aussagen am schnellsten?
+{«Kann man es messen?»}
+{«Gibt es schon ein Logo?»}
+{«Wer macht die Folien?»}
+{«Ist die Farbpalette konsistent?»}
+{A -- die Messung ist die diplomatische gemeinsame Sprache.}
+
+\mc{4.6 -- Das gefährliche Kompliment}
+Ein fachfremder Kollege sagt: «Das ist ja nur ein kleiner Sensor.» Was ist
+die korrekteste ET-Antwort?
+{«Klar. Bis du ihn anschliesst.»}
+{«Dann hat er bestimmt keinen Offset.»}
+{«Super, dann brauchen wir keine Masse.»}
+{«Ein Sensor misst nur Gefühle.»}
+{A}
+
+\mc{4.7 -- Interdisziplinäre Definition}
+Welche Aussage lässt ein ET-Team sofort vermuten, dass ein Projektmeeting
+nun länger als das Projekt selbst dauert?
+{«Lasst uns zuerst noch die Stakeholder abholen.»}
+{«Wir haben die Stromaufnahme gemessen.»}
+{«Der Kurzschluss ist lokalisiert.»}
+{«Die Leiterplatte ist angekommen.»}
+{A -- technisch nicht falsch, zeitlich aber selten harmlos.}
+
+\mc{4.8 -- Die erste Frage an den Prototyp}
+Ein Prototyp wird ausgestellt und leuchtet überraschend schön. Was fragt
+ein ET-Mensch mit hoher Wahrscheinlichkeit als Erstes?
+{«Was ist das für ein Strom?»}
+{«Welcher Font ist das?»}
+{«Wie ist die User Journey?»}
+{«Kann man das skalieren?»}
+{A -- Schönheit ist gut. Ein Strommesswert ist beruhigender.}
+
+\runde{5. Der Teil, der in keiner Vorlesung vorkommt}
+
+\mc{5.1 -- Das sauberste Laborprotokoll}
+Welche Formulierung ist die ehrlichste?
+{«Nach dem dritten Reset war das Verhalten reproduzierbar.»}
+{«Der Aufbau funktionierte beim ersten Versuch fehlerfrei.»}
+{«Die Masseklemme war nie ein Thema.»}
+{«Das Datenblatt war überraschend eindeutig.»}
+{A -- reproduzierbar ist hier ein mutiger, aber fachlich vertretbarer Begriff.}
+
+\mc{5.2 -- Die natürliche Feindin des Prototyps}
+Was bringt einen funktionierenden Prototypen am zuverlässigsten aus dem
+Gleichgewicht?
+{«Kannst du das rasch noch einmal vorzeigen?»}
+{Eine zweite Messung}
+{Eine beschriftete Leitung}
+{Ein vollständig geladenes Netzteil}
+{A -- das ist ein Feldversuch mit hoher Trefferquote.}
+
+\mc{5.3 -- Das Labororakel}
+Ein Messwert ist exakt das Gegenteil der Erwartung. Welche Erklärung ist
+am wahrscheinlichsten?
+{Der Massebezug ist irgendwo kreativ geworden.}
+{Die Natur hat heute andere Konstanten.}
+{Das Ohmsche Gesetz gilt nur bis Mittag.}
+{Das Messgerät unterstützt jetzt Agile.}
+{A -- danach darf man trotzdem noch das Messgerät prüfen.}
+
+\mc{5.4 -- Der perfekte Kommentar}
+Was ist die technisch korrekteste Reaktion auf den Satz «Ich habe nur
+eine Kleinigkeit geändert»?
+{«Welche Kleinigkeit, auf welchem Branch und mit welcher Versorgung?»}
+{«Dann kann es nichts Wichtiges sein.»}
+{«Perfekt, dann brauchen wir nicht zu messen.»}
+{«Ich öffne schon einmal die Präsentation.»}
+{A}
+
+\mc{5.5 -- Ein System mit Persönlichkeit}
+Wann ist eine Schaltung offiziell stabil?
+{Wenn sie während der Demo nicht sichtbar schwingt.}
+{Wenn die Polstellen gute Laune haben.}
+{Wenn das Oszilloskop keine Fragen mehr stellt.}
+{Wenn der Projektordner «final\_final» heisst.}
+{A -- pragmatische Campusdefinition; die theoretische folgt im Zweifel später.}
+
+\mc{5.6 -- Das letzte Wort im Labor}
+Wer gewinnt eine Diskussion über ein elektrisches Verhalten am häufigsten?
+{Die Messung}
+{Die Person mit den meisten Folien}
+{Die eleganteste Simulation}
+{Derjenige, der «eigentlich» sagt}
+{A -- manchmal sogar gegen die eigene Überzeugung.}
+
+\offenfrage{5.7 -- Produktname}
+Gib dem manuellen Gegenentwurf zur Autoscale-Taste einen Produktnamen.
+{Juryentscheid. Gute Beispiele wären «Mettler-Mode», «Handskalierung Pro» oder
+«Erst denken, dann drehen».}
+
+\offenfrage{5.8 -- Abspann}
+Vervollständige den Satz: «Der Prototyp war fast fertig, bis \ldots»
+{Juryentscheid. Ein technischer Bezug ist Pflicht; ein plausibler Schuldiger
+bringt Zusatzruhm.}
+
+\vfill
+\begin{center}
+  \textit{Ende. Die richtige Antwort war selbstverständlich: erst messen.}
+\end{center}
+
+\end{document}
+\fi

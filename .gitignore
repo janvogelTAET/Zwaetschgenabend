@@ -2,6 +2,11 @@
 .vscode/
 *.code-workspace
 
+# Die reproduzierbare LaTeX-Workshop-Projektkonfiguration versionieren
+!.vscode/
+!.vscode/settings.json
+!.vscode/keybindings.json
+
 # LaTeX Build-Ausgabe
 build/
 *.aux
