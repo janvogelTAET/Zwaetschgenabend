@@ -1,17 +1,28 @@
-# Whitelist: nur .tex, README.md und .gitignore kommen ins Repo.
-# Alles andere (PDFs, Build-Dateien, .vscode, Workspace, .latexmkrc usw.) wird ignoriert.
-*
-
-# Unterordner durchsuchen, damit .tex-Dateien darin gefunden werden
-!*/
-
-!.gitignore
-!README.md
-!*.tex
-
-# Gruppen-App (eine HTML-Datei, läuft direkt im Browser)
-!app/*.html
-
-# Ordner, die nie ins Repo sollen, auch wenn sie .tex enthalten
+# VS Code Workspace und Editor-Einstellungen
 .vscode/
+*.code-workspace
+
+# LaTeX Build-Ausgabe
 build/
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.synctex(busy)
+*.bbl
+*.blg
+*.bcf
+*.run.xml
+*.nav
+*.snm
+*.vrb
+*.lof
+*.lot
+
+# Betriebssystem
+.DS_Store
+Thumbs.db
+desktop.ini
