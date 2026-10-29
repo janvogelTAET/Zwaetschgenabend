@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zwätschgen Teams</title>
+<style>
+  :root {
+    --bg: #f6f2fa;
+    --surface: #ffffff;
+    --text: #1f1530;
+    --muted: #6b5f7d;
+    --plum: #5b2a86;
+    --plum-soft: #ece3f5;
+    --border: #ddd2ea;
+    --y1: #2a9d8f;
+    --y2: #e9a03b;
+    --y3: #d1495b;
+    --doz: #5b2a86;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg); color: var(--text);
+  }
+  header {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 14px 20px; background: var(--plum); color: #fff;
+  }
+  header h1 { font-size: 1.15rem; margin: 0; letter-spacing: .02em; }
+  header .stats { font-size: .9rem; opacity: .9; }
+  header nav { display: flex; gap: 8px; }
+  button { font: inherit; cursor: pointer; }
+  .ghost {
+    background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.35);
+    padding: 8px 14px; border-radius: 10px;
+  }
+  .ghost:hover { background: rgba(255,255,255,.25); }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; }
+
+  /* Check-in */
+  #checkin { text-align: center; }
+  #checkin h2 { font-size: clamp(1.6rem, 4vw, 2.6rem); margin: 18px 0 6px; }
+  #checkin p { color: var(--muted); margin: 0 0 22px; font-size: 1.1rem; }
+  #name {
+    width: min(420px, 100%); padding: 14px 16px; font-size: 1.1rem;
+    border: 2px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--text);
+    margin-bottom: 22px; text-align: center;
+  }
+  #name:focus { outline: none; border-color: var(--plum); }
+  .choices {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+  }
+  @media (max-width: 760px) { .choices { grid-template-columns: repeat(2, 1fr); } }
+  .choice {
+    border: none; border-radius: 18px; padding: 34px 10px; color: #fff;
+    font-size: clamp(1.2rem, 3vw, 1.7rem); font-weight: 700;
+    box-shadow: 0 6px 18px rgba(40, 10, 70, .15); transition: transform .08s ease;
+  }
+  .choice small { display: block; font-weight: 500; font-size: .8rem; opacity: .85; margin-top: 6px; }
+  .choice:active { transform: scale(.97); }
+  .choice[data-cat="1"] { background: var(--y1); }
+  .choice[data-cat="2"] { background: var(--y2); }
+  .choice[data-cat="3"] { background: var(--y3); }
+  .choice[data-cat="D"] { background: var(--doz); }
+  .hint { margin-top: 18px; font-size: .85rem; color: var(--muted); }
+
+  /* Ergebnis */
+  .overlay {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(20, 8, 35, .55); padding: 16px; z-index: 10;
+  }
+  .hidden { display: none !important; }
+  .result-card {
+    width: min(560px, 100%); border-radius: 24px; padding: 36px 28px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,.35);
+  }
+  .result-card .small { font-size: 1.1rem; opacity: .85; }
+  .result-card .team { font-size: clamp(2.6rem, 9vw, 4.6rem); font-weight: 800; margin: 8px 0; letter-spacing: .03em; }
+  .result-card .sub { font-size: 1.05rem; opacity: .9; }
+  .result-card button {
+    margin-top: 22px; padding: 12px 26px; border-radius: 12px; border: 2px solid currentColor;
+    background: transparent; color: inherit; font-weight: 600;
+  }
+
+  /* Übersicht */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 18px; }
+  .toolbar h2 { margin: 0 auto 0 0; }
+  .btn {
+    padding: 9px 14px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text);
+  }
+  .btn.primary { background: var(--plum); color: #fff; border-color: var(--plum); }
+  .btn.danger { color: #b3261e; border-color: #e7b9b5; }
+  .summary { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+  .pill { padding: 6px 12px; border-radius: 999px; background: var(--surface); border: 1px solid var(--border); font-size: .9rem; }
+  .pill b { margin-left: 4px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 14px; }
+  .group { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+  .group-head { padding: 10px 14px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+  .group-body { padding: 10px 14px 14px; }
+  .bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--plum-soft); margin-bottom: 10px; }
+  .bar span { display: block; height: 100%; }
+  .counts { font-size: .82rem; color: var(--muted); margin-bottom: 8px; }
+  .members { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+  .members li { font-size: .82rem; padding: 3px 8px; border-radius: 999px; color: #fff; }
+  .section-title { margin: 26px 0 10px; font-size: 1.05rem; color: var(--muted); }
+
+  dialog { border: none; border-radius: 16px; padding: 22px; width: min(440px, 92vw); color: var(--text); background: var(--surface); }
+  dialog::backdrop { background: rgba(20, 8, 35, .5); }
+  dialog label { display: block; margin: 12px 0 4px; font-weight: 600; font-size: .92rem; }
+  dialog input, dialog select { width: 100%; padding: 9px 10px; border-radius: 9px; border: 1px solid var(--border); font: inherit; }
+  dialog .help { font-size: .8rem; color: var(--muted); margin-top: 4px; }
+  dialog .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 20px; }
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Zwätschgenabend · Team-Einteilung</h1>
+    <div class="stats" id="headerStats"></div>
+  </div>
+  <nav>
+    <button class="ghost" id="btnView">Übersicht</button>
+    <button class="ghost" id="btnSettings">Einstellungen</button>
+  </nav>
+</header>
+
+<main>
+  <section id="checkin">
+    <h2>Willkommen am Zwätschgenabend!</h2>
+    <p>Wähle dein Studienjahr, dann bekommst du dein Team.</p>
+    <input id="name" type="text" placeholder="Vorname (optional)" autocomplete="off">
+    <div class="choices">
+      <button class="choice" data-cat="1">1. Jahr<small>Taste 1</small></button>
+      <button class="choice" data-cat="2">2. Jahr<small>Taste 2</small></button>
+      <button class="choice" data-cat="3">3. Jahr<small>Taste 3</small></button>
+      <button class="choice" data-cat="D">Dozent:in<small>Taste D</small></button>
+    </div>
+    <div class="hint">Die Teams sind nach den Farben des Widerstands-Farbcodes benannt. Tastenkürzel 1, 2, 3 und D funktionieren, solange nicht ins Namensfeld getippt wird.</div>
+  </section>
+
+  <section id="overview" class="hidden">
+    <div class="toolbar">
+      <h2>Übersicht</h2>
+      <button class="btn" id="btnUndo">Letzte Eingabe rückgängig</button>
+      <button class="btn" id="btnRebalance">Alle neu verteilen</button>
+      <button class="btn" id="btnExport">CSV exportieren</button>
+      <button class="btn primary" id="btnBack">Zurück zum Check-in</button>
+    </div>
+    <div class="summary" id="summary"></div>
+    <div class="grid" id="studentGroups"></div>
+    <div class="section-title" id="dozTitle">Dozierenden-Teams</div>
+    <div class="grid" id="dozGroups"></div>
+  </section>
+</main>
+
+<div class="overlay hidden" id="result">
+  <div class="result-card" id="resultCard">
+    <div class="small" id="resultHello"></div>
+    <div class="team" id="resultTeam"></div>
+    <div class="sub" id="resultSub"></div>
+    <button id="resultOk">OK</button>
+  </div>
+</div>
+
+<dialog id="settings">
+  <h3 style="margin-top:0">Einstellungen</h3>
+  <label for="setExpected">Erwartete Studierende</label>
+  <input id="setExpected" type="number" min="1" step="1">
+  <div class="help">Daraus wird die Anzahl Teams berechnet. Kommen mehr Leute, entstehen automatisch weitere Teams.</div>
+  <label for="setSize">Zielgrösse pro Team</label>
+  <input id="setSize" type="number" min="2" max="12" step="1">
+  <label for="setDoz">Anzahl Dozierenden-Teams</label>
+  <select id="setDoz">
+    <option value="auto">Automatisch (ab 6 Dozierenden zwei Teams)</option>
+    <option value="1">1 Team</option>
+    <option value="2">2 Teams</option>
+  </select>
+  <label for="setTimeout">Ergebnis anzeigen für (Sekunden)</label>
+  <input id="setTimeout" type="number" min="2" max="60" step="1">
+  <div class="actions">
+    <button class="btn danger" id="btnReset">Alles zurücksetzen</button>
+    <button class="btn" id="btnCancel">Abbrechen</button>
+    <button class="btn primary" id="btnSave">Speichern</button>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const STORAGE_KEY = 'zwaetschgen-teams-v1';
+  const CAT_LABEL = { '1': '1. Jahr', '2': '2. Jahr', '3': '3. Jahr', 'D': 'Dozent:in' };
+  const CAT_COLOR = { '1': 'var(--y1)', '2': 'var(--y2)', '3': 'var(--y3)', 'D': 'var(--doz)' };
+  // Teamnamen nach Widerstands-Farbcode (Ziffer 0-9), danach Gold/Silber, dann nummeriert
+  const TEAMS = [
+    { name: 'Schwarz', bg: '#1d1d1f', fg: '#ffffff', code: 0 },
+    { name: 'Braun',   bg: '#7b4a2a', fg: '#ffffff', code: 1 },
+    { name: 'Rot',     bg: '#d62828', fg: '#ffffff', code: 2 },
+    { name: 'Orange',  bg: '#f77f00', fg: '#1d1d1f', code: 3 },
+    { name: 'Gelb',    bg: '#f2c200', fg: '#1d1d1f', code: 4 },
+    { name: 'Grün',    bg: '#2a9d55', fg: '#ffffff', code: 5 },
+    { name: 'Blau',    bg: '#1f6fd1', fg: '#ffffff', code: 6 },
+    { name: 'Violett', bg: '#7b3fb3', fg: '#ffffff', code: 7 },
+    { name: 'Grau',    bg: '#8a8a8a', fg: '#1d1d1f', code: 8 },
+    { name: 'Weiss',   bg: '#f5f5f5', fg: '#1d1d1f', code: 9 },
+    { name: 'Gold',    bg: '#c9a227', fg: '#1d1d1f', code: null },
+    { name: 'Silber',  bg: '#c0c0c8', fg: '#1d1d1f', code: null },
+  ];
+  const DOZ_TEAMS = [
+    { name: 'Dozierende A', bg: '#5b2a86', fg: '#ffffff' },
+    { name: 'Dozierende B', bg: '#3c1a5b', fg: '#ffffff' },
+  ];
+
+  function teamInfo(i) {
+    if (i < TEAMS.length) return TEAMS[i];
+    const hue = (i * 47) % 360;
+    return { name: 'Team ' + (i + 1), bg: `hsl(${hue} 55% 45%)`, fg: '#ffffff', code: null };
+  }
+
+  // ---------- Zustand ----------
+  const defaultState = () => ({
+    settings: { expected: 50, size: 5, doz: 'auto', timeout: 8 },
+    groupCount: null,   // Anzahl Studierenden-Teams, wird beim ersten Check-in fixiert
+    people: [],         // { id, name, cat, group }  group: Zahl (Studis) oder 'D0'/'D1'
+    nextId: 1,
+  });
+  let state = load();
+
+  function load() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return Object.assign(defaultState(), JSON.parse(raw));
+    } catch (e) { /* Speicher nicht verfügbar */ }
+    return defaultState();
+  }
+  function save() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* ignorieren */ }
+  }
+
+  const rand = () => Math.random();
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const students = () => state.people.filter(p => p.cat !== 'D');
+  const lecturers = () => state.people.filter(p => p.cat === 'D');
+
+  function initialGroupCount() {
+    const { expected, size } = state.settings;
+    return Math.max(1, Math.round(expected / size));
+  }
+
+  function dozGroupCount(nDoz) {
+    const s = state.settings.doz;
+    if (s === '1') return 1;
+    if (s === '2') return 2;
+    return nDoz >= 6 ? 2 : 1;
+  }
+
+  // ---------- Live-Zuteilung ----------
+  // Studierende: Team mit den wenigsten Personen desselben Jahrgangs,
+  // bei Gleichstand das kleinste Team, sonst Zufall.
+  function assignStudent(cat) {
+    if (state.groupCount == null) state.groupCount = initialGroupCount();
+    // Mehr Leute als erwartet: frühzeitig ein neues Team eröffnen, damit es sich
+    // mit den nächsten Ankünften gemischt füllt (statt nur mit Nachzüglern)
+    const size = state.settings.size;
+    while (students().length + 1 > (state.groupCount + 0.5) * size) state.groupCount++;
+    const n = state.groupCount;
+    const total = Array(n).fill(0), same = Array(n).fill(0);
+    for (const p of students()) {
+      total[p.group]++;
+      if (p.cat === cat) same[p.group]++;
+    }
+    // Sicherheitsnetz: alle Teams voll, dann neues Team eröffnen
+    const max = size + 1;
+    if (total.every(t => t >= max)) {
+      state.groupCount++;
+      return state.groupCount - 1;
+    }
+    const candidates = [];
+    for (let g = 0; g < n; g++) {
+      if (total[g] >= max) continue;
+      candidates.push({ g, key: [same[g], total[g], rand()] });
+    }
+    candidates.sort((a, b) => a.key[0] - b.key[0] || a.key[1] - b.key[1] || a.key[2] - b.key[2]);
+    return candidates[0].g;
+  }
+
+  function assignLecturer() {
+    const k = dozGroupCount(lecturers().length + 1);
+    const total = Array(k).fill(0);
+    for (const p of lecturers()) {
+      const idx = Number(String(p.group).slice(1));
+      if (idx < k) total[idx]++;
+    }
+    let best = 0;
+    for (let i = 1; i < k; i++) if (total[i] < total[best] || (total[i] === total[best] && rand() < .5)) best = i;
+    return 'D' + best;
+  }
+
+  function checkIn(cat) {
+    const nameEl = document.getElementById('name');
+    const name = nameEl.value.trim();
+    const group = cat === 'D' ? assignLecturer() : assignStudent(cat);
+    const person = { id: state.nextId++, name, cat, group };
+    state.people.push(person);
+    save();
+    nameEl.value = '';
+    showResult(person);
+    render();
+  }
+
+  // ---------- Komplett neu verteilen ----------
+  // Pro Jahrgang mischen und reihum auf die Teams verteilen.
+  // Der Zeiger läuft über die Jahrgänge weiter, so bleiben Grösse und Mix ausgeglichen.
+  function rebalance() {
+    const studs = students();
+    const n = Math.max(1, Math.round(studs.length / state.settings.size));
+    state.groupCount = n;
+    let ptr = Math.floor(rand() * n);
+    for (const cat of shuffle(['1', '2', '3'])) {
+      for (const p of shuffle(studs.filter(s => s.cat === cat))) {
+        p.group = ptr % n;
+        ptr++;
+      }
+    }
+    const docs = shuffle(lecturers());
+    const k = dozGroupCount(docs.length);
+    docs.forEach((p, i) => { p.group = 'D' + (i % k); });
+    save();
+    render();
+  }
+
+  // ---------- Anzeige ----------
+  let resultTimer = null;
+  function showResult(p) {
+    const t = p.cat === 'D' ? DOZ_TEAMS[Number(p.group.slice(1))] : teamInfo(p.group);
+    const card = document.getElementById('resultCard');
+    card.style.background = t.bg;
+    card.style.color = t.fg;
+    document.getElementById('resultHello').textContent = (p.name ? p.name + ', du' : 'Du') + ' spielst im Team';
+    document.getElementById('resultTeam').textContent = t.name.toUpperCase();
+    let sub;
+    if (p.cat === 'D') sub = 'Viel Glück gegen die Studierenden!';
+    else if (t.code != null) sub = `Team ${p.group + 1} · Farbcode-Ziffer ${t.code}`;
+    else sub = `Team ${p.group + 1}`;
+    document.getElementById('resultSub').textContent = sub;
+    document.getElementById('result').classList.remove('hidden');
+    clearTimeout(resultTimer);
+    resultTimer = setTimeout(hideResult, state.settings.timeout * 1000);
+  }
+  function hideResult() {
+    document.getElementById('result').classList.add('hidden');
+  }
+
+  function groupCard(t, members, labelExtra) {
+    const div = document.createElement('div');
+    div.className = 'group';
+    const counts = { '1': 0, '2': 0, '3': 0, 'D': 0 };
+    members.forEach(m => counts[m.cat]++);
+    const bar = members.length
+      ? ['1', '2', '3', 'D'].filter(c => counts[c]).map(c =>
+          `<span style="width:${counts[c] / members.length * 100}%;background:${CAT_COLOR[c]}"></span>`).join('')
+      : '';
+    const countText = ['1', '2', '3'].map(c => `${c}.J: ${counts[c]}`).join(' · ') + (counts.D ? ` · Doz: ${counts.D}` : '');
+    div.innerHTML = `
+      <div class="group-head" style="background:${t.bg};color:${t.fg}">
+        <span>${t.name}${labelExtra || ''}</span><span>${members.length}</span>
+      </div>
+      <div class="group-body">
+        <div class="bar">${bar}</div>
+        <div class="counts">${countText}</div>
+        <ul class="members"></ul>
+      </div>`;
+    const ul = div.querySelector('.members');
+    members.forEach(m => {
+      const li = document.createElement('li');
+      li.style.background = CAT_COLOR[m.cat];
+      li.textContent = m.name || ('#' + m.id);
+      li.title = CAT_LABEL[m.cat];
+      ul.appendChild(li);
+    });
+    return div;
+  }
+
+  function render() {
+    const studs = students(), docs = lecturers();
+    const c = { '1': 0, '2': 0, '3': 0, 'D': 0 };
+    state.people.forEach(p => c[p.cat]++);
+    const n = state.groupCount ?? initialGroupCount();
+    document.getElementById('headerStats').textContent =
+      `${state.people.length} eingecheckt · ${n} Teams à ca. ${state.settings.size}`;
+
+    document.getElementById('summary').innerHTML =
+      ['1', '2', '3', 'D'].map(k => `<span class="pill" style="border-color:${CAT_COLOR[k]}">${CAT_LABEL[k]}<b>${c[k]}</b></span>`).join('') +
+      `<span class="pill">Total<b>${state.people.length}</b></span>`;
+
+    const sg = document.getElementById('studentGroups');
+    sg.innerHTML = '';
+    for (let g = 0; g < n; g++) {
+      const t = teamInfo(g);
+      const extra = t.code != null ? ` (${t.code})` : '';
+      sg.appendChild(groupCard(t, studs.filter(p => p.group === g), extra));
+    }
+
+    const dg = document.getElementById('dozGroups');
+    dg.innerHTML = '';
+    const k = Math.max(dozGroupCount(docs.length), ...docs.map(p => Number(p.group.slice(1)) + 1), 1);
+    for (let i = 0; i < k; i++) dg.appendChild(groupCard(DOZ_TEAMS[i], docs.filter(p => p.group === 'D' + i)));
+    document.getElementById('dozTitle').classList.toggle('hidden', docs.length === 0);
+  }
+
+  function exportCsv() {
+    const rows = [['Nr', 'Name', 'Kategorie', 'Team']];
+    state.people.forEach(p => {
+      const t = p.cat === 'D' ? DOZ_TEAMS[Number(p.group.slice(1))].name : teamInfo(p.group).name;
+      rows.push([p.id, p.name, CAT_LABEL[p.cat], t]);
+    });
+    const csv = '﻿' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(';')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'zwaetschgen-teams.csv';
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  // ---------- Ereignisse ----------
+  document.querySelectorAll('.choice').forEach(b => b.addEventListener('click', () => checkIn(b.dataset.cat)));
+  document.getElementById('resultOk').addEventListener('click', hideResult);
+  document.getElementById('result').addEventListener('click', e => { if (e.target.id === 'result') hideResult(); });
+
+  document.addEventListener('keydown', e => {
+    if (e.target.tagName === 'INPUT' && !['Enter'].includes(e.key)) {
+      // In das Namensfeld darf normal getippt werden
+      return;
+    }
+    if (!document.getElementById('result').classList.contains('hidden')) { hideResult(); return; }
+    if (document.getElementById('settings').open) return;
+    if (!document.getElementById('overview').classList.contains('hidden')) return;
+    const key = e.key.toUpperCase();
+    if (['1', '2', '3', 'D'].includes(key)) checkIn(key);
+  });
+
+  const viewBtn = document.getElementById('btnView');
+  function showOverview(on) {
+    document.getElementById('overview').classList.toggle('hidden', !on);
+    document.getElementById('checkin').classList.toggle('hidden', on);
+    viewBtn.textContent = on ? 'Check-in' : 'Übersicht';
+    render();
+  }
+  viewBtn.addEventListener('click', () => showOverview(document.getElementById('overview').classList.contains('hidden')));
+  document.getElementById('btnBack').addEventListener('click', () => showOverview(false));
+
+  document.getElementById('btnUndo').addEventListener('click', () => {
+    const last = state.people[state.people.length - 1];
+    if (!last) return;
+    if (!confirm(`Letzte Eingabe entfernen? (${last.name || '#' + last.id}, ${CAT_LABEL[last.cat]})`)) return;
+    state.people.pop();
+    save(); render();
+  });
+  document.getElementById('btnRebalance').addEventListener('click', () => {
+    if (!confirm('Alle Personen neu auf die Teams verteilen? Bereits genannte Teams ändern sich dabei.')) return;
+    rebalance();
+  });
+  document.getElementById('btnExport').addEventListener('click', exportCsv);
+
+  const dlg = document.getElementById('settings');
+  document.getElementById('btnSettings').addEventListener('click', () => {
+    const s = state.settings;
+    document.getElementById('setExpected').value = s.expected;
+    document.getElementById('setSize').value = s.size;
+    document.getElementById('setDoz').value = s.doz;
+    document.getElementById('setTimeout').value = s.timeout;
+    dlg.showModal();
+  });
+  document.getElementById('btnCancel').addEventListener('click', () => dlg.close());
+  document.getElementById('btnSave').addEventListener('click', () => {
+    const s = state.settings;
+    s.expected = Math.max(1, parseInt(document.getElementById('setExpected').value, 10) || s.expected);
+    s.size = Math.min(12, Math.max(2, parseInt(document.getElementById('setSize').value, 10) || s.size));
+    s.doz = document.getElementById('setDoz').value;
+    s.timeout = Math.min(60, Math.max(2, parseInt(document.getElementById('setTimeout').value, 10) || s.timeout));
+    // Solange noch niemand eingecheckt ist, Teamanzahl neu berechnen
+    if (students().length === 0) state.groupCount = null;
+    save(); render(); dlg.close();
+  });
+  document.getElementById('btnReset').addEventListener('click', () => {
+    if (!confirm('Wirklich alle Eingaben löschen?')) return;
+    const settings = state.settings;
+    state = defaultState();
+    state.settings = settings;
+    save(); render(); dlg.close();
+  });
+
+  render();
+})();
+</script>
+</body>
+</html>
